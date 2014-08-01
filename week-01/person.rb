@@ -22,11 +22,11 @@ class Person
   end
 
   def full_name
-    "#{@first_name} #{@last_name}"
+    "#{self.first_name} #{self.last_name}"
   end
 
   def age
-    Date.today.strftime("%Y").to_i - @birth_date.strftime("%Y").to_i
+    Date.today.strftime("%Y").to_i - self.birth_date.strftime("%Y").to_i
   end
 
   def younger_than?(other_person)

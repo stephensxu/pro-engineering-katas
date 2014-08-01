@@ -17,12 +17,10 @@
 # NOTE: You do NOT need to modify the initialize method.
 
 class Board
-  attr_reader :board, :row_count, :column_count
+  attr_reader :row_count, :column_count
   # These are now, e.g., Board::DimensionError
   class DimensionError < StandardError;end
   class CellError < StandardError;end
-
-  attr_reader :row_count, :column_count
 
   # Allow rectangular boards.
   def initialize(row_count, column_count)
@@ -65,10 +63,10 @@ class Board
 
   private
   def raise_unless_dimensions_valid!(row, column)
-    if row >= @row_count
-      raise DimensionError, "row must be < #{@row_count}"
-    elsif column >= @column_count
-      raise DimensionError, "column must be > #{@column_count}"
+    if row >= self.row_count
+      raise DimensionError, "row must be < #{self.row_count}"
+    elsif column >= self.column_count
+      raise DimensionError, "column must be > #{self.column_count}"
     end
     # Implement a single method that checks for the dimensions given and raises
     # a DimensionError unless they're valid. We don't need to test this method
