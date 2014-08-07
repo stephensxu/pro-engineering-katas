@@ -136,17 +136,3 @@ module MiniRecord
     end
   end
 end
-
-# class BlogPost < MiniRecord::Model
-# end
-
-# class User < MiniRecord::Model
-# end
-
-# me = User.new
-# p User.name_underscore
-# p User.name_underscore_plural
-
-# blog = BlogPost.new
-# p BlogPost.name_underscore
-# p BlogPost.name_underscore_plural
