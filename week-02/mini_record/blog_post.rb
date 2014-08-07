@@ -1,14 +1,6 @@
 class BlogPost < MiniRecord::Model
   self.attribute_names = [:id, :user_id, :title, :content, :created_at, :updated_at]
 
-  # Try it:
-  #  BlogPost.where('birthdate > ?', '1983-01-01)
-  def self.where(query, *args)
-    MiniRecord::Database.execute("SELECT * FROM blog_posts WHERE #{query}", *args).map do |row|
-      BlogPost.new(row)
-    end
-  end
-
   def self.find(pk)
     where('id = ?', pk).first
   end

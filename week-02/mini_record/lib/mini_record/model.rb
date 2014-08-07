@@ -38,6 +38,12 @@ module MiniRecord
         self.new(row)
       end
     end
+
+    def self.where(query, *args)
+      MiniRecord::Database.execute("SELECT * FROM #{self.name_underscore_plural} WHERE #{query}", *args).map do |row|
+        self.new(row)
+      end
+    end
   end
 end
 
