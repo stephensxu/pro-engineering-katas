@@ -1,9 +1,9 @@
 class BlogPost < MiniRecord::Model
   self.attribute_names = [:id, :user_id, :title, :content, :created_at, :updated_at]
 
-  def self.find(pk)
-    where('id = ?', pk).first
-  end
+  # def self.find(pk)
+  #   where('id = ?', pk).first
+  # end
 
   def self.create(attributes = {})
     # See http://ruby-doc.org/core-2.1.2/Object.html#method-i-tap

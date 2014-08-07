@@ -44,6 +44,10 @@ module MiniRecord
         self.new(row)
       end
     end
+
+    def self.find(pk)
+      where('id = ?', pk).first
+    end
   end
 end
 
