@@ -12,10 +12,6 @@ class User < MiniRecord::Model
     BlogPost.create(attributes)
   end
 
-  # def new_record?
-  #   read_attribute(:id).nil?
-  # end
-
   def save
     if new_record?
       insert_record!
@@ -24,10 +20,10 @@ class User < MiniRecord::Model
     end
   end
 
-  def read_attribute(attr_name)
-    @attributes[attr_name]
-  end
-  alias_method :[], :read_attribute
+  # def read_attribute(attr_name)
+  #   @attributes[attr_name]
+  # end
+  # alias_method :[], :read_attribute
 
   def write_attribute(attr_name, value)
     attr_name = attr_name.to_sym

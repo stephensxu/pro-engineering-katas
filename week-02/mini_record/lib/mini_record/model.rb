@@ -68,6 +68,19 @@ module MiniRecord
     def new_record?
       read_attribute(:id).nil?
     end
+
+    # def save
+    #   if new_record?
+    #     insert_record!
+    #   else
+    #     update_record!
+    #   end
+    # end
+
+    def read_attribute(attr_name)
+      @attributes[attr_name]
+    end
+    alias_method :[], :read_attribute
   end
 end
 
