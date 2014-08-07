@@ -1,5 +1,5 @@
 class User < MiniRecord::Model
-  self.attribute_names = [:id, :first_name, :last_name, :email, :birth_date, :created_at, :updated_at]
+  self.table_name = :users
 
   def blog_posts
     BlogPost.where('user_id = ?', self[:id])

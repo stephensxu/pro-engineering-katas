@@ -1,5 +1,5 @@
 class BlogPost < MiniRecord::Model
-  self.attribute_names = [:id, :user_id, :title, :content, :created_at, :updated_at]
+  self.table_name = :blog_posts
 
   def user
     User.find(self[:user_id])

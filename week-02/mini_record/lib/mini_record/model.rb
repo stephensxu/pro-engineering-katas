@@ -1,6 +1,13 @@
 module MiniRecord
 
   class Model
+    MiniRecord::Database.database = 'blog.db' # This line is here so that self.table_name= method knows which database to fetch data from
+
+    def self.table_name=(table_name)
+      info_array = MiniRecord::Database.execute("PRAGMA table_info(#{table_name.to_s})")
+      @attribute_names = info_array.map { |item| item["name"] }.map{ |attr_name| attr_name.to_sym }
+      @attribute_names.freeze
+    end
     # Attribute names are at the class level since they're "schema" data
     def self.attribute_names
       @attribute_names
