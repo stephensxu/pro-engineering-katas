@@ -24,6 +24,33 @@ module MiniRecord
     def attribute?(attr_name)
       self.class.attribute?(attr_name)
     end
-  end
 
+    def self.name_underscore
+      self.name.split(/(?=[A-Z])/).join("_").downcase
+    end
+
+    def self.name_underscore_plural
+      self.name_underscore + "s"
+    end
+
+    def self.all
+      MiniRecord::Database.execute("SELECT * FROM #{self.name_underscore_plural}").map do |row|
+        self.new(row)
+      end
+    end
+  end
 end
+
+# class BlogPost < MiniRecord::Model
+# end
+
+# class User < MiniRecord::Model
+# end
+
+# me = User.new
+# p User.name_underscore
+# p User.name_underscore_plural
+
+# blog = BlogPost.new
+# p BlogPost.name_underscore
+# p BlogPost.name_underscore_plural

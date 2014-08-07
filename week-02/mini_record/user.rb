@@ -1,12 +1,6 @@
 class User < MiniRecord::Model
   self.attribute_names = [:id, :first_name, :last_name, :email, :birth_date, :created_at, :updated_at]
 
-  def self.all
-    MiniRecord::Database.execute('SELECT * FROM users').map do |row|
-      User.new(row)
-    end
-  end
-
   # Try it:
   #  User.where('birthdate > ?', '1983-01-01)
   def self.where(query, *args)
