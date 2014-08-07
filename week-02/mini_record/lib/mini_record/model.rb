@@ -48,6 +48,12 @@ module MiniRecord
     def self.find(pk)
       where('id = ?', pk).first
     end
+
+    def self.create(attributes = {})
+      self.new(attributes).tap do |user|
+        user.save
+      end
+    end
   end
 end
 

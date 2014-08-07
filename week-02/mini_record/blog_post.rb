@@ -1,17 +1,6 @@
 class BlogPost < MiniRecord::Model
   self.attribute_names = [:id, :user_id, :title, :content, :created_at, :updated_at]
 
-  # def self.find(pk)
-  #   where('id = ?', pk).first
-  # end
-
-  def self.create(attributes = {})
-    # See http://ruby-doc.org/core-2.1.2/Object.html#method-i-tap
-    BlogPost.new(attributes).tap do |user|
-      user.save
-    end
-  end
-
   def initialize(attributes = {})
     # See lib/mini_record/ext/hash.rb for how these methods are defined.
     attributes.symbolize_keys!
