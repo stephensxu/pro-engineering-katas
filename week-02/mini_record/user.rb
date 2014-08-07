@@ -12,71 +12,66 @@ class User < MiniRecord::Model
     BlogPost.create(attributes)
   end
 
-  def save
-    if new_record?
-      insert_record!
-    else
-      update_record!
-    end
-  end
-
-  # def read_attribute(attr_name)
-  #   @attributes[attr_name]
+  # def save
+  #   if new_record?
+  #     insert_record!
+  #   else
+  #     update_record!
+  #   end
   # end
-  # alias_method :[], :read_attribute
 
-  def write_attribute(attr_name, value)
-    attr_name = attr_name.to_sym
+  # def write_attribute(attr_name, value)
+  #   attr_name = attr_name.to_sym
 
-    if attribute?(attr_name)
-      @attributes[attr_name] = value
-    else
-      fail MiniRecord::MissingAttributeError, "can't write unknown attribute `#{attr_name}'"
-    end
-  end
-  alias_method :[]=, :write_attribute
+  #   if attribute?(attr_name)
+  #     @attributes[attr_name] = value
+  #   else
+  #     fail MiniRecord::MissingAttributeError, "can't write unknown attribute `#{attr_name}'"
+  #   end
+  # end
+  # alias_method :[]=, :write_attribute
 
-  private
+  # private
 
-  def insert_record!
-    now = DateTime.now
+  # def insert_record!
+  #   now = DateTime.now
 
-    write_attribute(:created_at, now) if attribute?(:created_at)
-    write_attribute(:updated_at, now) if attribute?(:updated_at)
+  #   write_attribute(:created_at, now) if attribute?(:created_at)
+  #   write_attribute(:updated_at, now) if attribute?(:updated_at)
 
-    values  = @attributes.values
+  #   values  = @attributes.values
 
-    MiniRecord::Database.execute(insert_sql, *values).tap do
-      # We don't have a value for id until we insert the database, so fetch
-      # the last insert ID after a successful insert and update our Ruby model.
-      write_attribute(:id, MiniRecord::Database.last_insert_row_id)
-    end
+  #   MiniRecord::Database.execute(insert_sql, *values).tap do
+  #     # We don't have a value for id until we insert the database, so fetch
+  #     # the last insert ID after a successful insert and update our Ruby model.
+  #     write_attribute(:id, MiniRecord::Database.last_insert_row_id)
+  #   end
 
-    true
-  end
+  #   true
+  # end
 
-  def update_record!
-    write_attribute(:updated_at, DateTime.now) if attribute?(:updated_at)
+  # def update_record!
+  #   write_attribute(:updated_at, DateTime.now) if attribute?(:updated_at)
 
-    values  = @attributes.values
-    MiniRecord::Database.execute(update_sql, *values, read_attribute(:id))
+  #   values  = @attributes.values
+  #   MiniRecord::Database.execute(update_sql, *values, read_attribute(:id))
 
-    true
-  end
+  #   true
+  # end
 
-  def insert_sql
-    columns = @attributes.keys
+  # def insert_sql
+  #   columns = @attributes.keys
 
-    placeholders  = Array.new(columns.length, '?').join(',')
+  #   placeholders  = Array.new(columns.length, '?').join(',')
 
-    "INSERT INTO users (#{columns.join(',')}) VALUES (#{placeholders})"
-  end
+  #   "INSERT INTO users (#{columns.join(',')}) VALUES (#{placeholders})"
+  # end
 
-  def update_sql
-    columns = @attributes.keys
+  # def update_sql
+  #   columns = @attributes.keys
 
-    set_clause = columns.map { |col| "#{col} = ?" }.join(',')
+  #   set_clause = columns.map { |col| "#{col} = ?" }.join(',')
 
-    "UPDATE users SET #{set_clause} WHERE id = ?"
-  end
+  #   "UPDATE users SET #{set_clause} WHERE id = ?"
+  # end
 end

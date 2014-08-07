@@ -69,18 +69,71 @@ module MiniRecord
       read_attribute(:id).nil?
     end
 
-    # def save
-    #   if new_record?
-    #     insert_record!
-    #   else
-    #     update_record!
-    #   end
-    # end
+    def save
+      if new_record?
+        insert_record!
+      else
+        update_record!
+      end
+    end
 
     def read_attribute(attr_name)
       @attributes[attr_name]
     end
     alias_method :[], :read_attribute
+
+    def write_attribute(attr_name, value)
+      attr_name = attr_name.to_sym
+
+      if attribute?(attr_name)
+        @attributes[attr_name] = value
+      else
+        fail MiniRecord::MissingAttributeError, "can't write unknown attribute '#{attr_name}'"
+      end
+    end
+    alias_method :[]=, :write_attribute
+
+    private
+
+    def insert_record!
+      now = DateTime.now
+
+      write_attribute(:created_at, now) if attribute?(:created_at)
+      write_attribute(:updated_at, now) if attribute?(:updated_at)
+
+      values = @attributes.values
+
+      MiniRecord::Database.execute(insert_sql, *values).tap do
+        write_attribute(:id, MiniRecord::Database.last_insert_row_id)
+      end
+
+      true
+    end
+
+    def update_record!
+      write_attribute(:updated_at, DataTime.now) if attribute?(:updated_at)
+
+      values = @attributes.values
+      MiniRecord::Database.execute(update_sql, *values, read_attribute(:id))
+
+      true
+    end
+
+    def insert_sql
+      columns = @attributes.keys
+
+      placeholders = Array.new(columns.length, '?').join(',')
+
+      "INSERT INTO #{self.class.name_underscore_plural} (#{columns.join(',')}) VALUES (#{placeholders})"
+    end
+
+    def update_sql
+      columns = @attributes.keys
+
+      set_clause = columns.map{ |col| "#{col} = ?" }.join(',')
+
+      "UPDATE #{self.class.name_underscore_plural} SET #{set_clause} WHERE id = ?"
+    end
   end
 end
 
