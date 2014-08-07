@@ -1,18 +1,6 @@
 class User < MiniRecord::Model
   self.attribute_names = [:id, :first_name, :last_name, :email, :birth_date, :created_at, :updated_at]
 
-  def initialize(attributes = {})
-    # See lib/mini_record/ext/hash.rb for how these methods are defined.
-    attributes.symbolize_keys!
-    attributes.assert_valid_keys(User.attribute_names)
-
-    @attributes = {}
-
-    User.attribute_names.each do |attr_name|
-      @attributes[attr_name] = attributes[attr_name]
-    end
-  end
-
   def blog_posts
     BlogPost.where('user_id = ?', self[:id])
   end

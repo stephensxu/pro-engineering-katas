@@ -54,6 +54,16 @@ module MiniRecord
         user.save
       end
     end
+
+    def initialize(attributes = {})
+      attributes.symbolize_keys!
+      attributes.assert_valid_keys(self.attribute_names)
+
+      @attributes = {}
+      self.attribute_names.each do |attr_name|
+        @attributes[attr_name] = attributes[attr_name]
+      end
+    end
   end
 end
 
