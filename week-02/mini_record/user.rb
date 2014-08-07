@@ -12,9 +12,9 @@ class User < MiniRecord::Model
     BlogPost.create(attributes)
   end
 
-  def new_record?
-    read_attribute(:id).nil?
-  end
+  # def new_record?
+  #   read_attribute(:id).nil?
+  # end
 
   def save
     if new_record?

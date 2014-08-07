@@ -11,9 +11,9 @@ class BlogPost < MiniRecord::Model
     user
   end
 
-  def new_record?
-    read_attribute(:id).nil?
-  end
+  # def new_record?
+  #   read_attribute(:id).nil?
+  # end
 
   def save
     if new_record?

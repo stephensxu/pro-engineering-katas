@@ -64,6 +64,10 @@ module MiniRecord
         @attributes[attr_name] = attributes[attr_name]
       end
     end
+
+    def new_record?
+      read_attribute(:id).nil?
+    end
   end
 end
 
