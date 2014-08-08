@@ -8,7 +8,7 @@ module MiniRecord
       @table_name = table_name
       @attribute_names = table_info_array.map { |field| field["name"].to_sym }.freeze
     end
-    
+
     def self.table_name
       @table_name
     end
@@ -45,13 +45,13 @@ module MiniRecord
     # end
 
     def self.all
-      MiniRecord::Database.execute("SELECT * FROM #{self.table_name.to_s}").map do |row|
+      MiniRecord::Database.execute("SELECT * FROM #{self.table_name}").map do |row|
         self.new(row)
       end
     end
 
     def self.where(query, *args)
-      MiniRecord::Database.execute("SELECT * FROM #{self.table_name.to_s} WHERE #{query}", *args).map do |row|
+      MiniRecord::Database.execute("SELECT * FROM #{self.table_name} WHERE #{query}", *args).map do |row|
         self.new(row)
       end
     end
@@ -135,7 +135,7 @@ module MiniRecord
 
       placeholders = Array.new(columns.length, '?').join(',')
 
-      "INSERT INTO #{self.class.table_name.to_s} (#{columns.join(',')}) VALUES (#{placeholders})"
+      "INSERT INTO #{self.class.table_name} (#{columns.join(',')}) VALUES (#{placeholders})"
     end
 
     def update_sql
@@ -143,7 +143,7 @@ module MiniRecord
 
       set_clause = columns.map{ |col| "#{col} = ?" }.join(',')
 
-      "UPDATE #{self.class.table_name.to_s} SET #{set_clause} WHERE id = ?"
+      "UPDATE #{self.class.table_name} SET #{set_clause} WHERE id = ?"
     end
   end
 end
