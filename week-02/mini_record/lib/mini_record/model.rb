@@ -5,8 +5,13 @@ module MiniRecord
 
     def self.table_name=(table_name)
       info_array = MiniRecord::Database.execute("PRAGMA table_info(#{table_name.to_s})")
+      @table_name = table_name
       @attribute_names = info_array.map { |item| item["name"] }.map{ |attr_name| attr_name.to_sym }
       @attribute_names.freeze
+    end
+
+    def self.table_name
+      @table_name
     end
     # Attribute names are at the class level since they're "schema" data
     def self.attribute_names
@@ -32,22 +37,22 @@ module MiniRecord
       self.class.attribute?(attr_name)
     end
 
-    def self.name_underscore
-      self.name.split(/(?=[A-Z])/).join("_").downcase
-    end
+    # def self.name_underscore
+    #   self.name.split(/(?=[A-Z])/).join("_").downcase
+    # end
 
-    def self.name_underscore_plural
-      self.name_underscore + "s"
-    end
+    # def self.name_underscore_plural
+    #   self.name_underscore + "s"
+    # end
 
     def self.all
-      MiniRecord::Database.execute("SELECT * FROM #{self.name_underscore_plural}").map do |row|
+      MiniRecord::Database.execute("SELECT * FROM #{self.table_name.to_s}").map do |row|
         self.new(row)
       end
     end
 
     def self.where(query, *args)
-      MiniRecord::Database.execute("SELECT * FROM #{self.name_underscore_plural} WHERE #{query}", *args).map do |row|
+      MiniRecord::Database.execute("SELECT * FROM #{self.table_name.to_s} WHERE #{query}", *args).map do |row|
         self.new(row)
       end
     end
@@ -131,7 +136,7 @@ module MiniRecord
 
       placeholders = Array.new(columns.length, '?').join(',')
 
-      "INSERT INTO #{self.class.name_underscore_plural} (#{columns.join(',')}) VALUES (#{placeholders})"
+      "INSERT INTO #{self.class.table_name.to_s} (#{columns.join(',')}) VALUES (#{placeholders})"
     end
 
     def update_sql
@@ -139,7 +144,7 @@ module MiniRecord
 
       set_clause = columns.map{ |col| "#{col} = ?" }.join(',')
 
-      "UPDATE #{self.class.name_underscore_plural} SET #{set_clause} WHERE id = ?"
+      "UPDATE #{self.class.table_name.to_s} SET #{set_clause} WHERE id = ?"
     end
   end
 end
