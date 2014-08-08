@@ -4,12 +4,11 @@ module MiniRecord
     MiniRecord::Database.database = 'blog.db' # This line is here so that self.table_name= method knows which database to fetch data from
 
     def self.table_name=(table_name)
-      info_array = MiniRecord::Database.execute("PRAGMA table_info(#{table_name.to_s})")
+      table_info_array = MiniRecord::Database.execute("PRAGMA table_info(#{table_name.to_s})")
       @table_name = table_name
-      @attribute_names = info_array.map { |item| item["name"] }.map{ |attr_name| attr_name.to_sym }
-      @attribute_names.freeze
+      @attribute_names = table_info_array.map { |field| field["name"].to_sym }.freeze
     end
-
+    
     def self.table_name
       @table_name
     end
@@ -21,7 +20,7 @@ module MiniRecord
     def self.attribute_names=(attribute_names)
       @attribute_names = attribute_names.map { |attr_name| attr_name.to_sym }
       @attribute_names.freeze
-    end
+    end 
 
     def self.attribute?(attr_name)
       attribute_names.include?(attr_name.to_sym)
